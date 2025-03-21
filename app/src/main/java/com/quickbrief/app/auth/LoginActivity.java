@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         authHelper = new AuthHelper();
-        setupGoogleSignIn();
+        // setupGoogleSignIn(); // Temporarily disabled
         initializeViews();
         setupClickListeners();
         loadSavedCredentials();
@@ -52,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupGoogleSignIn() {
+        // Temporarily disabled
+        /*
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -72,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+        */
     }
 
     private void initializeViews() {
@@ -89,7 +92,10 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(v -> handleLogin());
         signupButton.setOnClickListener(v -> handleSignup());
-        googleSignInButton.setOnClickListener(v -> handleGoogleSignIn());
+        // googleSignInButton.setOnClickListener(v -> handleGoogleSignIn()); // Temporarily disabled
+        if (googleSignInButton != null) {
+            googleSignInButton.setEnabled(false); // Disable the button
+        }
         forgotPasswordLink.setOnClickListener(v -> showForgotPasswordDialog());
     }
 
@@ -157,11 +163,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void handleGoogleSignIn() {
+        // Temporarily disabled
+        /*
         Intent signInIntent = authHelper.getGoogleSignInClient().getSignInIntent();
         googleSignInLauncher.launch(signInIntent);
+        */
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        // Temporarily disabled
+        /*
         authHelper.signInWithGoogle(account)
                 .addOnSuccessListener(authResult -> {
                     startMainActivity();
@@ -172,6 +183,7 @@ public class LoginActivity extends AppCompatActivity {
                         "Google authentication failed: " + e.getMessage(),
                         Toast.LENGTH_SHORT).show()
                 );
+        */
     }
 
     private void showForgotPasswordDialog() {

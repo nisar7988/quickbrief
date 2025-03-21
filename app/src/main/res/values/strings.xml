@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QuickBrief</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="full_name">Full Name</string>
+    <string name="create_account">Create Account</string>
+    <string name="continue_as_guest">Continue as Guest</string>
+    <string name="dont_have_account">Don\'t have an account? Sign up</string>
+    <string name="already_have_account">Already have an account? Login</string>
+    <string name="error_fetching_news">Error fetching news</string>
+    <string name="error_network">Network error: %1$s</string>
+    <string name="share">Share</string>
+    <string name="share_news_via">Share news via</string>
+    <string name="select_language">Select Language</string>
+    <string name="language_changed">Language changed to %1$s</string>
+    <string name="language_restart_required">Please restart the app for language changes to take effect</string>
+    <string name="select_category">Select Category</string>
+    <string name="logout">Logout</string>
+    <string name="logout_confirmation">Are you sure you want to logout?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="logging_out">Logging out…</string>
+    <string name="no_news_available">No news available for %1$s</string>
+    <string name="end_of_news_feed">You\'ve reached the end of the news feed</string>
+    <string name="view_article">View Article</string>
+    <string name="loading">Loading...</string>
+    <string name="open_in_browser">Open in Browser</string>
+    <string name="share_article">Share Article</string>
+    
+    <!-- Profile page strings -->
+    <string name="profile">Profile</string>
+    <string name="name">Name</string>
+    <string name="bio">Bio</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="save">Save</string>
+    <string name="profile_updated">Profile updated successfully</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="my_profile">My Profile</string>
+    
+    <!-- Language names -->
+    <string-array name="language_names">
+        <item>English</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Italian</item>
+        <item>Russian</item>
+        <item>Japanese</item>
+        <item>Chinese</item>
+        <item>Arabic</item>
+    </string-array>
+    
+    <!-- Language codes for NewsAPI -->
+    <string-array name="language_codes">
+        <item>en</item>
+        <item>es</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>it</item>
+        <item>ru</item>
+        <item>ja</item>
+        <item>zh</item>
+        <item>ar</item>
+    </string-array>
+    
+    <!-- Category names -->
+    <string-array name="category_names">
+        <item>General</item>
+        <item>Business</item>
+        <item>Entertainment</item>
+        <item>Health</item>
+        <item>Science</item>
+        <item>Sports</item>
+        <item>Technology</item>
+    </string-array>
+    
+    <!-- Category codes -->
+    <string-array name="category_codes">
+        <item>general</item>
+        <item>business</item>
+        <item>entertainment</item>
+        <item>health</item>
+        <item>science</item>
+        <item>sports</item>
+        <item>technology</item>
+    </string-array>
+</resources>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="category_codes">
+        <item>general</item>
+        <item>business</item>
+        <item>entertainment</item>
+        <item>health</item>
+        <item>science</item>
+        <item>sports</item>
+        <item>technology</item>
+    </string-array>
+    <string-array name="category_names">
+        <item>General</item>
+        <item>Business</item>
+        <item>Entertainment</item>
+        <item>Health</item>
+        <item>Science</item>
+        <item>Sports</item>
+        <item>Technology</item>
+    </string-array>
+    <string-array name="language_codes">
+        <item>en</item>
+        <item>es</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>it</item>
+        <item>ru</item>
+        <item>ja</item>
+        <item>zh</item>
+        <item>ar</item>
+    </string-array>
+    <string-array name="language_names">
+        <item>English</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Italian</item>
+        <item>Russian</item>
+        <item>Japanese</item>
+        <item>Chinese</item>
+        <item>Arabic</item>
+    </string-array>
+    <color name="accent_blue">#415A77</color>
+    <color name="black">#000000</color>
+    <color name="gray">#808080</color>
+    <color name="ic_launcher_background">@color/primary_dark_blue</color>
+    <color name="light_blue">#778DA9</color>
+    <color name="off_white">#F8F9FA</color>
+    <color name="primary_dark_blue">#0D1B2A</color>
+    <color name="secondary_dark_blue">#1B263B</color>
+    <color name="white">#FFFFFF</color>
+    <dimen name="action_bar_default_height">56dp</dimen>
+    <string name="already_have_account">Already have an account? Login</string>
+    <string name="app_name">QuickBrief</string>
+    <string name="bio">Bio</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="continue_as_guest">Continue as Guest</string>
+    <string name="create_account">Create Account</string>
+    <string name="dont_have_account">Don\'t have an account? Sign up</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="email">Email</string>
+    <string name="end_of_news_feed">You\'ve reached the end of the news feed</string>
+    <string name="error_fetching_news">Error fetching news</string>
+    <string name="error_network">Network error: %1$s</string>
+    <string name="full_name">Full Name</string>
+    <string name="gcm_defaultSenderId" translatable="false">972189800711</string>
+    <string name="google_api_key" translatable="false">AIzaSyATRj4GkXNzVMVKmTvFCHM3NWhQq4Fs_f8</string>
+    <string name="google_app_id" translatable="false">1:972189800711:android:124c8dc32629b5d73a8da2</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyATRj4GkXNzVMVKmTvFCHM3NWhQq4Fs_f8</string>
+    <string name="google_storage_bucket" translatable="false">quickbrief-1b256.firebasestorage.app</string>
+    <string name="language_changed">Language changed to %1$s</string>
+    <string name="language_restart_required">Please restart the app for language changes to take effect</string>
+    <string name="loading">Loading...</string>
+    <string name="logging_out">Logging out…</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="logout_confirmation">Are you sure you want to logout?</string>
+    <string name="my_profile">My Profile</string>
+    <string name="name">Name</string>
+    <string name="no">No</string>
+    <string name="no_news_available">No news available for %1$s</string>
+    <string name="open_in_browser">Open in Browser</string>
+    <string name="password">Password</string>
+    <string name="profile">Profile</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="profile_updated">Profile updated successfully</string>
+    <string name="project_id" translatable="false">quickbrief-1b256</string>
+    <string name="save">Save</string>
+    <string name="select_category">Select Category</string>
+    <string name="select_language">Select Language</string>
+    <string name="share">Share</string>
+    <string name="share_article">Share Article</string>
+    <string name="share_news_via">Share news via</string>
+    <string name="signup">Sign Up</string>
+    <string name="view_article">View Article</string>
+    <string name="yes">Yes</string>
+    <style name="CustomAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorPrimary">@color/accent_blue</item>
+        <item name="colorSurface">@color/secondary_dark_blue</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/DialogTitleText</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/DialogBodyText</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+    </style>
+    <style name="CustomMenuDialog" parent="Theme.MaterialComponents.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/MenuAnimation</item>
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.5</item>
+    </style>
+    <style name="DialogBodyText" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textColor">@color/off_white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="DialogTitleText" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="MenuAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_top</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_top</item>
+    </style>
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/light_blue</item>
+    </style>
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/light_blue</item>
+    </style>
+    <style name="Theme.NewsApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary_dark_blue</item>
+        <item name="colorPrimaryVariant">@color/secondary_dark_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accent_blue</item>
+        <item name="colorSecondaryVariant">@color/light_blue</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:statusBarColor">@color/primary_dark_blue</item>
+        <item name="android:windowBackground">@color/off_white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

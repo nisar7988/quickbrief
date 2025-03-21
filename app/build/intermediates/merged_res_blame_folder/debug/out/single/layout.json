@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "com.quickbrief.app-mergeDebugResources-38:/layout/custom_menu_layout.xml",
+        "source": "com.quickbrief.app-main-41:/layout/custom_menu_layout.xml"
+    },
+    {
+        "merged": "com.quickbrief.app-mergeDebugResources-38:/layout/activity_profile.xml",
+        "source": "com.quickbrief.app-main-41:/layout/activity_profile.xml"
+    },
+    {
+        "merged": "com.quickbrief.app-mergeDebugResources-38:/layout/item_news.xml",
+        "source": "com.quickbrief.app-main-41:/layout/item_news.xml"
+    },
+    {
+        "merged": "com.quickbrief.app-mergeDebugResources-38:/layout/activity_signup.xml",
+        "source": "com.quickbrief.app-main-41:/layout/activity_signup.xml"
+    },
+    {
+        "merged": "com.quickbrief.app-mergeDebugResources-38:/layout/activity_web_view.xml",
+        "source": "com.quickbrief.app-main-41:/layout/activity_web_view.xml"
+    },
+    {
+        "merged": "com.quickbrief.app-mergeDebugResources-38:/layout/activity_main.xml",
+        "source": "com.quickbrief.app-main-41:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.quickbrief.app-mergeDebugResources-38:/layout/your_layout.xml",
+        "source": "com.quickbrief.app-main-41:/layout/your_layout.xml"
+    },
+    {
+        "merged": "com.quickbrief.app-mergeDebugResources-38:/layout/activity_login.xml",
+        "source": "com.quickbrief.app-main-41:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.quickbrief.app-mergeDebugResources-38:/layout/item_loading.xml",
+        "source": "com.quickbrief.app-main-41:/layout/item_loading.xml"
+    }
+]

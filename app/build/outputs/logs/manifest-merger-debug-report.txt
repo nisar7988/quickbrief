@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:2:1-47:12
-INJECTED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:2:1-47:12
-INJECTED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:2:1-47:12
-INJECTED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:2:1-47:12
+ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:2:1-51:12
+INJECTED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:2:1-51:12
+INJECTED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:2:1-51:12
+INJECTED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:2:1-51:12
 MERGED from [androidx.databinding:viewbinding:8.1.0] C:\Users\hp\.gradle\caches\8.10\transforms\4b48eac3492cb9b43f3dd28a835709e2\transformed\jetified-viewbinding-8.1.0\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\hp\.gradle\caches\8.10\transforms\6e5ae6e602910639c61754463bdee2c4\transformed\material-1.11.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\hp\.gradle\caches\8.10\transforms\36ff629a22b84fc9130529d1b97643ec\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
@@ -106,8 +106,8 @@ MERGED from [io.grpc:grpc-android:1.57.2] C:\Users\hp\.gradle\caches\8.10\transf
 	android:name
 		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:5:22-76
 application
-ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:7:5-46:19
-INJECTED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:7:5-46:19
+ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:7:5-50:19
+INJECTED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:7:5-50:19
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\hp\.gradle\caches\8.10\transforms\6e5ae6e602910639c61754463bdee2c4\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.11.0] C:\Users\hp\.gradle\caches\8.10\transforms\6e5ae6e602910639c61754463bdee2c4\transformed\material-1.11.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\hp\.gradle\caches\8.10\transforms\36ff629a22b84fc9130529d1b97643ec\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -168,12 +168,12 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\hp
 		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:14:9-45
 	android:name
 		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:8:9-38
-activity#com.quickbrief.app.auth.LoginActivity
+activity#com.quickbrief.app.auth.WelcomeActivity
 ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:16:9-23:20
 	android:exported
 		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:18:13-36
 	android:name
-		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:17:13-47
+		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:17:13-49
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
 ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:19:13-22:29
 action#android.intent.action.MAIN
@@ -184,40 +184,46 @@ category#android.intent.category.LAUNCHER
 ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:21:17-77
 	android:name
 		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:21:27-74
-activity#com.quickbrief.app.SignupActivity
+activity#com.quickbrief.app.auth.LoginActivity
 ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:25:9-27:40
 	android:exported
 		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:27:13-37
 	android:name
-		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:26:13-43
+		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:26:13-47
+activity#com.quickbrief.app.SignupActivity
+ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:29:9-31:40
+	android:exported
+		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:31:13-37
+	android:name
+		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:30:13-43
 activity#com.quickbrief.app.MainActivity
-ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:29:9-31:39
+ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:33:9-35:39
 	android:exported
-		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:31:13-36
+		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:35:13-36
 	android:name
-		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:30:13-41
+		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:34:13-41
 activity#com.quickbrief.app.WebViewActivity
-ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:33:9-36:58
+ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:37:9-40:58
 	android:parentActivityName
-		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:36:13-55
+		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:40:13-55
 	android:exported
-		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:35:13-37
+		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:39:13-37
 	android:name
-		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:34:13-44
+		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:38:13-44
 activity#com.quickbrief.app.ProfileActivity
-ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:38:9-41:58
+ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:42:9-45:58
 	android:parentActivityName
-		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:41:13-55
+		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:45:13-55
 	android:exported
-		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:40:13-37
+		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:44:13-37
 	android:name
-		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:39:13-44
+		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:43:13-44
 activity#com.quickbrief.app.auth.ProfileActivity
-ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:43:9-45:40
+ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:47:9-49:40
 	android:exported
-		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:45:13-37
+		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:49:13-37
 	android:name
-		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:44:13-49
+		ADDED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml:48:13-49
 uses-sdk
 INJECTED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\hp\AndroidStudioProjects\quickbrief\app\src\main\AndroidManifest.xml

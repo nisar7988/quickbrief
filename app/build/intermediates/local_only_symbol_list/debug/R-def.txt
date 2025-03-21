@@ -52,6 +52,7 @@ id chipSports
 id chipTechnology
 id confirmPasswordInput
 id confirmPasswordLayout
+id continueAsGuestButton
 id createdAtTextView
 id displayLayout
 id editButton
@@ -100,6 +101,7 @@ layout activity_main
 layout activity_profile
 layout activity_signup
 layout activity_web_view
+layout activity_welcome
 layout custom_menu_layout
 layout item_loading
 layout item_news

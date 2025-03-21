@@ -3306,6 +3306,7 @@ id container
 id content
 id contentPanel
 id contiguous
+id continueAsGuestButton
 id continuousVelocity
 id coordinator
 id cos
@@ -3842,6 +3843,7 @@ layout activity_main
 layout activity_profile
 layout activity_signup
 layout activity_web_view
+layout activity_welcome
 layout browser_actions_context_menu_page
 layout browser_actions_context_menu_row
 layout custom_dialog

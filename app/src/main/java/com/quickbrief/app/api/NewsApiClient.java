@@ -1,11 +1,12 @@
 package com.quickbrief.app.api;
 
+import com.quickbrief.app.BuildConfig;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewsApiClient {
     private static final String BASE_URL = "https://newsapi.org/";
-    private static final String API_KEY = "fb11adb3d0d849279d8423ae67d39f4f";
+ private static final String API_KEY = BuildConfig.NEWS_API_KEY;
     private static NewsApiClient instance;
     private final NewsApiService newsApiService;
 

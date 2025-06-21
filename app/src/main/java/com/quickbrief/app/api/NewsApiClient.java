@@ -5,7 +5,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewsApiClient {
-    private static final String BASE_URL = "https://newsapi.org/";
+ private static final String BASE_URL = "https://newsdata.io/api/";
  private static final String API_KEY = BuildConfig.NEWS_API_KEY;
     private static NewsApiClient instance;
     private final NewsApiService newsApiService;

@@ -11,7 +11,7 @@ public class NewsApiResponse {
     private int totalResults;
 
     @SerializedName("articles")
-    private List<Article> articles;
+    private List<Article> results;
 
     public String getStatus() {
         return status;
@@ -21,8 +21,8 @@ public class NewsApiResponse {
         return totalResults;
     }
 
-    public List<Article> getArticles() {
-        return articles;
+    public List<Article> getResults() {
+ return results;
     }
 
     public static class Article {
@@ -42,10 +42,13 @@ public class NewsApiResponse {
         private String url;
 
         @SerializedName("urlToImage")
-        private String urlToImage;
+ private String image_url;
 
         @SerializedName("publishedAt")
-        private String publishedAt;
+ private String pubDate;
+
+ @SerializedName("source_id")
+ private String sourceId;
 
         @SerializedName("content")
         private String content;
@@ -70,12 +73,16 @@ public class NewsApiResponse {
             return url;
         }
 
-        public String getUrlToImage() {
-            return urlToImage;
+ public String getImageUrl() {
+ return image_url;
         }
 
-        public String getPublishedAt() {
-            return publishedAt;
+ public String getPubDate() {
+ return pubDate;
+        }
+
+ public String getSourceId() {
+ return sourceId;
         }
 
         public String getContent() {

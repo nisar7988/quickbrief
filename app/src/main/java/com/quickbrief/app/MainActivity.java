@@ -422,9 +422,9 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "onResponse: Status=" + apiResponse.getStatus() + 
                           ", TotalResults=" + apiResponse.getTotalResults() +
                           ", CurrentPage=" + currentPage);
-                    
                     List<News> newsItems = new ArrayList<>();
-                    if (apiResponse.getArticles() != null) {
+                    if (apiResponse.getResults() != null) {
+                        // Change getArticles() to getResults() to match NewsData.io response
                         for (NewsApiResponse.Article article : apiResponse.getArticles()) {
                             if (article.getTitle() != null && article.getDescription() != null) {
                                 newsItems.add(new News(

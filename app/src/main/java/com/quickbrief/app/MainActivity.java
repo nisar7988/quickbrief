@@ -430,7 +430,7 @@ public class MainActivity extends AppCompatActivity {
                                 newsItems.add(new News(
                                     article.getTitle(),
                                     article.getDescription(),
- article.getImage_url(), // Changed from getUrlToImage() to getImage_url()
+ article.getImageUrl(), // Changed from getUrlToImage() to getImageUrl()
                                     article.getSource() != null ? article.getSource().getName() : "Unknown",
                                     article.getUrl()
                                 ));

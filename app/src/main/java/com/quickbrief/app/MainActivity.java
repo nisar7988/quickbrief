@@ -423,14 +423,14 @@ public class MainActivity extends AppCompatActivity {
                           ", TotalResults=" + apiResponse.getTotalResults() +
                           ", CurrentPage=" + currentPage);
                     List<News> newsItems = new ArrayList<>();
-                    if (apiResponse.getResults() != null) {
+                    if (apiResponse.getResults() != null) { // Corrected from getArticles() to getResults() previously, ensuring it's results now
                         // Change getArticles() to getResults() to match NewsData.io response
-                        for (NewsApiResponse.Article article : apiResponse.getArticles()) {
+ for (NewsApiResponse.Article article : apiResponse.getResults()) {
                             if (article.getTitle() != null && article.getDescription() != null) {
                                 newsItems.add(new News(
                                     article.getTitle(),
                                     article.getDescription(),
-                                    article.getUrlToImage(),
+ article.getImage_url(), // Changed from getUrlToImage() to getImage_url()
                                     article.getSource() != null ? article.getSource().getName() : "Unknown",
                                     article.getUrl()
                                 ));

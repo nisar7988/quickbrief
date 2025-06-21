@@ -1,0 +1,117 @@
+gitignore
+/build
+.gradle
+/local.properties
+.DS_Store
+/captures
+.idea/
+.cxx
+/app/build
+/app/.cxx
+/app/build.gradle.kts.versions
+/app/gradle.properties.versions
+/gradlew
+/gradlew.bat
+/gradle/wrapper/gradle-wrapper.jar
+/sdk
+/gradle-app.setting
+.externalNativeBuild/
+/buildSharedObject
+/app/build
+/app/.externalNativeBuild
+/app/build
+/app/src/main/.externalNativeBuild
+app/build/
+local.properties
+.idea/workspace.xml
+.idea/libraries
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/gradle.xml
+.idea/modules.xml
+.idea/vcs.xml
+build/
+*.iml
+*.keystore
+
+# User-specific files
+.idea/deploymentTargetDropDown.xml
+.idea/runConfigurations.xml
+
+# Android Studio generates these files.
+# .idea/workspace.xml # Already included
+# .idea/libraries/ # Already included
+# .idea/navEditor.xml # Already included
+# .idea/assetWizardSettings.xml # Already included
+# .idea/gradle.xml # Already included
+# .idea/modules.xml # Already included
+# .idea/vcs.xml # Already included
+
+# Generated files
+app/build/
+app/.cxx/
+app/build.gradle.kts.versions
+app/gradle.properties.versions
+gradlew
+gradlew.bat
+gradle/wrapper/gradle-wrapper.jar
+sdk
+gradle-app.setting
+.externalNativeBuild/
+buildSharedObject/
+app/build/
+app/.externalNativeBuild/
+app/build/
+app/src/main/.externalNativeBuild/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Gradle files
+.gradle/
+build/
+
+# External Native Build files
+.externalNativeBuild/
+buildSharedObject/
+
+# Keeps track of local changes in the IDE
+.idea/workspace.xml
+
+# Avoid including system files in the repository
+.DS_Store
+
+# Generated Android Studio files (might be in .idea)
+.idea/libraries/
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# Gradle build files (generated)
+app/build/
+app/.cxx/
+app/build.gradle.kts.versions
+app/gradle.properties.versions
+app/build/
+app/.externalNativeBuild/
+app/build/
+app/src/main/.externalNativeBuild/
+
+# IDE specific files
+.idea/gradle.xml
+.idea/modules.xml
+.idea/vcs.xml
+
+# User-specific preferences (avoid committing)
+.idea/deploymentTargetDropDown.xml
+.idea/runConfigurations.xml
+
+# Android specific build files
+*.iml
+*.ap_
+*.apk
+*.aab
+*.aar
+*.so
+
+# Keystore file
+*.keystore

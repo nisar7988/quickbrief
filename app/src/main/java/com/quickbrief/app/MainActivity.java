@@ -425,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
                     List<News> newsItems = new ArrayList<>();
                     if (apiResponse.getResults() != null) { // Corrected from getArticles() to getResults() previously, ensuring it's results now
                         // Change getArticles() to getResults() to match NewsData.io response
- for (NewsApiResponse.Article article : apiResponse.getResults()) {
+                        for (NewsApiResponse.Article article : apiResponse.getResults()) {
                             if (article.getTitle() != null && article.getDescription() != null) {
                                 newsItems.add(new News(
                                     article.getTitle(),

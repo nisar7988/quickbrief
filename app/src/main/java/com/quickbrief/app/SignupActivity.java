@@ -2,6 +2,7 @@ package com.quickbrief.app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +28,8 @@ public class SignupActivity extends AppCompatActivity {
     private EditText nameInput, emailInput, passwordInput, confirmPasswordInput;
     private Button signupButton;
     private TextView loginLink;
+    private CircularProgressIndicator progressBar;
+    private boolean isLoading = false;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -52,10 +56,22 @@ public class SignupActivity extends AppCompatActivity {
         
         signupButton = findViewById(R.id.signupButton);
         loginLink = findViewById(R.id.loginLink);
+        progressBar = findViewById(R.id.progressBar);
 
         // Set click listeners
         signupButton.setOnClickListener(v -> attemptSignup());
         loginLink.setOnClickListener(v -> finish());
+    }
+
+    private void setLoading(boolean loading) {
+        isLoading = loading;
+        if (loading) {
+            progressBar.setVisibility(View.VISIBLE);
+            signupButton.setEnabled(false);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            signupButton.setEnabled(true);
+        }
     }
 
     private void attemptSignup() {
@@ -86,6 +102,8 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
+        setLoading(true);
+
         // Create user with Firebase Auth
         mAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -105,6 +123,7 @@ public class SignupActivity extends AppCompatActivity {
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
+                                        setLoading(false);
                                         if (task.isSuccessful()) {
                                             // Redirect to MainActivity
                                             Intent intent = new Intent(SignupActivity.this, MainActivity.class);
@@ -118,6 +137,7 @@ public class SignupActivity extends AppCompatActivity {
                                 });
                         }
                     } else {
+                        setLoading(false);
                         // If sign up fails, display a message to the user.
                         Toast.makeText(SignupActivity.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }

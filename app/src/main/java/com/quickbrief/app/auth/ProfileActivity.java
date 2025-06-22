@@ -2,10 +2,12 @@ package com.quickbrief.app.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,6 +23,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView userIdTextView;
     private TextView verificationStatusTextView;
     private TextView createdAtTextView;
+    private CircularProgressIndicator progressIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +36,19 @@ public class ProfileActivity extends AppCompatActivity {
         initializeViews();
     }
 
+    private void setLoading(boolean loading) {
+        if (loading) {
+            progressIndicator.setVisibility(View.VISIBLE);
+        } else {
+            progressIndicator.setVisibility(View.GONE);
+        }
+    }
+
     private void loadUserData() {
+        setLoading(true);
         FirebaseUser currentUser = authHelper.getCurrentUser();
         if (currentUser == null) {
+            setLoading(false);
             startLoginActivity();
             return;
         }
@@ -49,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        setLoading(false);
                         if (dataSnapshot.exists()) {
                             UserData userData = dataSnapshot.getValue(UserData.class);
                             if (userData != null) {
@@ -59,6 +73,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
+                        setLoading(false);
                         // Handle error
                     }
                 });
@@ -94,5 +109,6 @@ public class ProfileActivity extends AppCompatActivity {
         userIdTextView = findViewById(R.id.userIdTextView);
         verificationStatusTextView = findViewById(R.id.verificationStatusTextView);
         createdAtTextView = findViewById(R.id.createdAtTextView);
+        progressIndicator = findViewById(R.id.progressIndicator);
     }
 } 

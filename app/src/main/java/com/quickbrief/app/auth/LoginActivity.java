@@ -3,6 +3,7 @@ package com.quickbrief.app.auth;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.quickbrief.app.auth.ProfileActivity;
 import com.quickbrief.app.R;
@@ -24,9 +26,13 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText emailEditText;
     private TextInputEditText passwordEditText;
     private CheckBox rememberMeCheckbox;
+    private CircularProgressIndicator progressBar;
+    private MaterialButton loginButton;
+    private MaterialButton signupButton;
     private AuthHelper authHelper;
     private SharedPreferences sharedPreferences;
     private ActivityResultLauncher<Intent> googleSignInLauncher;
+    private boolean isLoading = false;
 
     private static final String PREF_NAME = "auth_prefs";
     private static final String KEY_EMAIL = "email";
@@ -82,11 +88,12 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.passwordEditText);
         rememberMeCheckbox = findViewById(R.id.rememberMeCheckbox);
         sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        progressBar = findViewById(R.id.progressBar);
+        loginButton = findViewById(R.id.loginButton);
+        signupButton = findViewById(R.id.signupButton);
     }
 
     private void setupClickListeners() {
-        MaterialButton loginButton = findViewById(R.id.loginButton);
-        MaterialButton signupButton = findViewById(R.id.signupButton);
         MaterialButton googleSignInButton = findViewById(R.id.googleSignInButton);
         TextView forgotPasswordLink = findViewById(R.id.forgotPasswordLink);
 
@@ -119,13 +126,28 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private void setLoading(boolean loading) {
+        isLoading = loading;
+        if (loading) {
+            progressBar.setVisibility(View.VISIBLE);
+            loginButton.setEnabled(false);
+            signupButton.setEnabled(false);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            loginButton.setEnabled(true);
+            signupButton.setEnabled(true);
+        }
+    }
+
     private void handleLogin() {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
         if (validateInput(email, password)) {
+            setLoading(true);
             authHelper.login(email, password)
                     .addOnSuccessListener(authResult -> {
+                        setLoading(false);
                         if (authHelper.isEmailVerified()) {
                             saveCredentials();
                             startMainActivity();
@@ -134,11 +156,12 @@ public class LoginActivity extends AppCompatActivity {
                             showEmailVerificationDialog();
                         }
                     })
-                    .addOnFailureListener(e -> 
+                    .addOnFailureListener(e -> {
+                        setLoading(false);
                         Toast.makeText(LoginActivity.this, 
                             "Login failed: " + e.getMessage(), 
-                            Toast.LENGTH_SHORT).show()
-                    );
+                            Toast.LENGTH_SHORT).show();
+                    });
         }
     }
 
@@ -147,18 +170,21 @@ public class LoginActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString().trim();
 
         if (validateInput(email, password)) {
+            setLoading(true);
             authHelper.signUp(email, password)
                     .addOnSuccessListener(authResult -> {
+                        setLoading(false);
                         Toast.makeText(LoginActivity.this, 
                             "Account created successfully. Please verify your email.", 
                             Toast.LENGTH_LONG).show();
                         showEmailVerificationDialog();
                     })
-                    .addOnFailureListener(e -> 
+                    .addOnFailureListener(e -> {
+                        setLoading(false);
                         Toast.makeText(LoginActivity.this, 
                             "Signup failed: " + e.getMessage(), 
-                            Toast.LENGTH_SHORT).show()
-                    );
+                            Toast.LENGTH_SHORT).show();
+                    });
         }
     }
 

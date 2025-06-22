@@ -342,7 +342,13 @@ public class MainActivity extends AppCompatActivity {
                     if (apiResponse.getResults() != null) {
                         Log.d(TAG, "onResponse: API returned " + apiResponse.getResults().size() + " articles");
                         for (NewsApiResponse.Article article : apiResponse.getResults()) {
+                            Log.d(TAG, "Article details - Title: " + article.getTitle() + 
+                                      ", Description: " + article.getDescription() + 
+                                      ", URL: " + article.getUrl() + 
+                                      ", Image URL: " + article.getImageUrl());
+                            
                             if (article.getTitle() != null && article.getDescription() != null) {
+                                Log.d(TAG, "Creating News object - Title: " + article.getTitle() + ", URL: " + article.getUrl());
                                 newsItems.add(new News(
                                     article.getTitle(),
                                     article.getDescription(),

@@ -74,11 +74,19 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         holder.itemView.setOnClickListener(v -> {
+            Log.d(TAG, "News card clicked for position: " + position);
+            Log.d(TAG, "News title: " + news.getTitle());
+            Log.d(TAG, "News URL: " + news.getUrl());
+            
             if (news.getUrl() != null && !news.getUrl().isEmpty()) {
+                Log.d(TAG, "Opening WebViewActivity with URL: " + news.getUrl());
                 Intent intent = new Intent(context, com.quickbrief.app.WebViewActivity.class);
                 intent.putExtra(com.quickbrief.app.WebViewActivity.EXTRA_URL, news.getUrl());
                 intent.putExtra(com.quickbrief.app.WebViewActivity.EXTRA_TITLE, news.getTitle());
                 context.startActivity(intent);
+            } else {
+                Log.e(TAG, "News URL is null or empty for position: " + position);
+                android.widget.Toast.makeText(context, "No URL available for this article", android.widget.Toast.LENGTH_SHORT).show();
             }
         });
         

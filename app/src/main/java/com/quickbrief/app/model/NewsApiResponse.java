@@ -45,8 +45,11 @@ public class NewsApiResponse {
         @SerializedName("description")
         private String description;
 
-        @SerializedName("url")
+        @SerializedName("link")
         private String url;
+
+        @SerializedName("url")
+        private String urlFallback;
 
         @SerializedName("image_url")
         private String image_url;
@@ -77,7 +80,7 @@ public class NewsApiResponse {
         }
 
         public String getUrl() {
-            return url;
+            return url != null ? url : urlFallback;
         }
 
         public String getImageUrl() {

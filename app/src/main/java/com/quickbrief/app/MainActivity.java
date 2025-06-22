@@ -427,6 +427,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        // Setup toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        
+        // Remove default title to make room for logo
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+        
         newsRecyclerView = findViewById(R.id.newsRecyclerView);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         progressBar = findViewById(R.id.progressBar);

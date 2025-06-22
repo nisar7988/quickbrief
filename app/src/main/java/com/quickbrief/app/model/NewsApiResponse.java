@@ -13,6 +13,9 @@ public class NewsApiResponse {
     @SerializedName("results")
     private List<Article> results;
 
+    @SerializedName("nextPage")
+    private String nextPage;
+
     public String getStatus() {
         return status;
     }
@@ -23,6 +26,10 @@ public class NewsApiResponse {
 
     public List<Article> getResults() {
         return results;
+    }
+
+    public String getNextPage() {
+        return nextPage;
     }
 
     public static class Article {

@@ -8,20 +8,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
     private TextInputLayout nameLayout, emailLayout, passwordLayout, confirmPasswordLayout;
@@ -31,17 +21,10 @@ public class SignupActivity extends AppCompatActivity {
     private CircularProgressIndicator progressBar;
     private boolean isLoading = false;
 
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
-        // Initialize Firebase Auth and Firestore
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
 
         // Initialize views
         nameLayout = findViewById(R.id.nameLayout);
@@ -66,10 +49,14 @@ public class SignupActivity extends AppCompatActivity {
     private void setLoading(boolean loading) {
         isLoading = loading;
         if (loading) {
-            progressBar.setVisibility(View.VISIBLE);
+            if (progressBar != null) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
             signupButton.setEnabled(false);
         } else {
-            progressBar.setVisibility(View.GONE);
+            if (progressBar != null) {
+                progressBar.setVisibility(View.GONE);
+            }
             signupButton.setEnabled(true);
         }
     }
@@ -104,44 +91,16 @@ public class SignupActivity extends AppCompatActivity {
 
         setLoading(true);
 
-        // Create user with Firebase Auth
-        mAuth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        // Sign up success, update UI with the signed-in user's information
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        if (user != null) {
-                            // Store additional user data in Firestore
-                            Map<String, Object> userData = new HashMap<>();
-                            userData.put("name", name);
-                            userData.put("email", email);
-
-                            db.collection("users").document(user.getUid())
-                                .set(userData)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        setLoading(false);
-                                        if (task.isSuccessful()) {
-                                            // Redirect to MainActivity
-                                            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                                            intent.putExtra("isGuest", false);
-                                            startActivity(intent);
-                                            finish();
-                                        } else {
-                                            Toast.makeText(SignupActivity.this, "Failed to store user data.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                        }
-                    } else {
-                        setLoading(false);
-                        // If sign up fails, display a message to the user.
-                        Toast.makeText(SignupActivity.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+        // Simulate signup process
+        signupButton.postDelayed(() -> {
+            setLoading(false);
+            Toast.makeText(SignupActivity.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
+            
+            // Redirect to MainActivity
+            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+            intent.putExtra("isGuest", false);
+            startActivity(intent);
+            finish();
+        }, 1000);
     }
 }

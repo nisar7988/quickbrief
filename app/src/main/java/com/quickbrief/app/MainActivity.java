@@ -21,6 +21,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.quickbrief.app.adapter.NewsAdapter;
 import com.quickbrief.app.api.NewsApiClient;
+import com.quickbrief.app.auth.LoginActivity;
+import com.quickbrief.app.auth.ProfileActivity;
 import com.quickbrief.app.model.News;
 import com.quickbrief.app.model.NewsApiResponse;
 import com.quickbrief.app.util.LanguageManager;
@@ -54,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private String currentLanguage;
     
     // Pagination variables
-    private int currentPage = 1;
-    private final int PAGE_SIZE = 10; // Increased from 3 to a more reasonable value
+    private String nextPage = null;
     private boolean isLoading = false;
     private boolean isLastPage = false;
     private LinearLayoutManager layoutManager;
@@ -267,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetAndFetchNews() {
-        currentPage = 1;
+        nextPage = null;
         isLastPage = false;
         isLoading = false;
         newsList.clear();
@@ -282,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
         }
         
         isLoading = true;
-        Log.d(TAG, "fetchNews: currentPage=" + currentPage);
+        Log.d(TAG, "fetchNews: nextPage=" + nextPage);
         
         // Log API key for debugging
         String apiKey = NewsApiClient.getApiKey();
@@ -292,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "fetchNews: Using category=" + currentCategory);
         Toast.makeText(this, "Category: " + currentCategory, Toast.LENGTH_SHORT).show();
 
-        if (currentPage == 1) {
+        if (nextPage == null) {
             progressBar.setVisibility(View.VISIBLE);
         } else {
             Log.d(TAG, "fetchNews: Adding loading footer");
@@ -304,10 +305,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Use the working /1/latest endpoint with category
+        // Use the /1/news endpoint with cursor-based pagination
         Call<NewsApiResponse> call = NewsApiClient.getInstance()
             .getNewsApiService()
-            .getLatestNews("en", currentCategory, NewsApiClient.getApiKey());
+            .getNews("en", currentCategory, nextPage, NewsApiClient.getApiKey());
         Log.d(TAG, "fetchNews: Making API call with URL: " + call.request().url());
         
         call.enqueue(new Callback<NewsApiResponse>() {
@@ -315,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<NewsApiResponse> call, @NonNull Response<NewsApiResponse> response) {
                 Log.d(TAG, "onResponse: Response code=" + response.code() + ", isSuccessful=" + response.isSuccessful());
                 
-                if (currentPage != 1) {
+                if (nextPage != null) {
                     Log.d(TAG, "onResponse: Removing loading footer");
                     newsAdapter.removeLoadingFooter();
                 } else {
@@ -327,9 +328,10 @@ public class MainActivity extends AppCompatActivity {
 
                 if (response.isSuccessful() && response.body() != null) {
                     NewsApiResponse apiResponse = response.body();
-                    Log.d(TAG, "onResponse: Status=" + apiResponse.getStatus() + ", TotalResults=" + apiResponse.getTotalResults() + ", CurrentPage=" + currentPage);
+                    Log.d(TAG, "onResponse: Status=" + apiResponse.getStatus() + ", TotalResults=" + apiResponse.getTotalResults());
                     List<News> newsItems = new ArrayList<>();
                     if (apiResponse.getResults() != null) {
+                        Log.d(TAG, "onResponse: API returned " + apiResponse.getResults().size() + " articles");
                         for (NewsApiResponse.Article article : apiResponse.getResults()) {
                             if (article.getTitle() != null && article.getDescription() != null) {
                                 newsItems.add(new News(
@@ -341,14 +343,28 @@ public class MainActivity extends AppCompatActivity {
                                 ));
                             }
                         }
+                    } else {
+                        Log.d(TAG, "onResponse: API returned null results");
                     }
-                    Log.d(TAG, "onResponse: Received " + newsItems.size() + " news items for page " + currentPage);
-                    if (currentPage == 1) {
+                    
+                    // Update nextPage for cursor-based pagination
+                    nextPage = apiResponse.getNextPage();
+                    Log.d(TAG, "onResponse: nextPage for next request = " + nextPage);
+                    
+                    // Pagination logic
+                    if (newsItems.isEmpty() || nextPage == null) {
+                        isLastPage = true;
+                        Log.d(TAG, "onResponse: Reached last page - no more news available");
+                        if (nextPage != null) {
+                            Toast.makeText(MainActivity.this, getString(R.string.end_of_news_feed), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    
+                    if (thisIsFirstPage()) {
                         newsAdapter.updateNews(newsItems);
                     } else {
                         newsAdapter.addNews(newsItems);
                     }
-                    isLastPage = true; // No pagination for /latest
                 } else {
                     String errorMsg = getString(R.string.error_fetching_news);
                     try {
@@ -356,6 +372,7 @@ public class MainActivity extends AppCompatActivity {
                             String errorBody = response.errorBody().string();
                             errorMsg += ": " + errorBody;
                             Log.e(TAG, "onResponse: Error body: " + errorBody);
+                            Toast.makeText(MainActivity.this, errorBody, Toast.LENGTH_LONG).show();
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Error reading error body", e);
@@ -370,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "onFailure: Network error", t);
                 Log.e(TAG, "onFailure: Request URL: " + call.request().url());
                 
-                if (currentPage != 1) {
+                if (nextPage != null) {
                     Log.d(TAG, "onFailure: Removing loading footer");
                     newsAdapter.removeLoadingFooter();
                 } else {
@@ -383,24 +400,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    
-    private void loadMoreNews() {
-        if (isLoading || isLastPage) {
-            Log.d(TAG, "loadMoreNews: Skip loading more - isLoading=" + isLoading + ", isLastPage=" + isLastPage);
-            return;
-        }
-        
-        Log.d(TAG, "loadMoreNews: Starting to load more news");
-        isLoading = true;
-        currentPage++;
-        Log.d(TAG, "loadMoreNews: Loading page " + currentPage);
-        
-        // Add a small delay to prevent rapid multiple calls
-        newsRecyclerView.postDelayed(() -> {
-            fetchNews();
-        }, 300);
+
+    private boolean thisIsFirstPage() {
+        return nextPage == null || newsList.isEmpty();
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -445,11 +449,13 @@ public class MainActivity extends AppCompatActivity {
                 int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
                 
-                if (!isLoading && !isLastPage) {
-                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                            && firstVisibleItemPosition >= 0
-                            && totalItemCount >= PAGE_SIZE) {
+                // Trigger loading when user is 3 items away from the bottom
+                if (!isLoading && !isLastPage && dy > 0) { // Only trigger on scroll down
+                    if (lastVisibleItemPosition >= totalItemCount - 3 && totalItemCount > 0) {
+                        Log.d(TAG, "onScrolled: Triggering load more - lastVisible=" + lastVisibleItemPosition + 
+                              ", total=" + totalItemCount + ", isLoading=" + isLoading + ", isLastPage=" + isLastPage);
                         loadMoreNews();
                     }
                 }
@@ -489,5 +495,24 @@ public class MainActivity extends AppCompatActivity {
             
             categoryChipGroup.addView(chip);
         }
+    }
+
+    private void loadMoreNews() {
+        if (isLoading || isLastPage) {
+            Log.d(TAG, "loadMoreNews: Skip loading more - isLoading=" + isLoading + ", isLastPage=" + isLastPage);
+            return;
+        }
+        
+        Log.d(TAG, "loadMoreNews: Starting to load more news with nextPage=" + nextPage);
+        isLoading = true;
+        
+        // Add a small delay to prevent rapid multiple calls and show loading footer
+        newsRecyclerView.postDelayed(() -> {
+            if (!isLoading) {
+                Log.d(TAG, "loadMoreNews: Loading was cancelled, skipping");
+                return;
+            }
+            fetchNews();
+        }, 200);
     }
 } 

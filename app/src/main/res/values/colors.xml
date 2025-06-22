@@ -8,4 +8,7 @@
     <color name="off_white">#F8F9FA</color>
     <color name="black">#000000</color>
     <color name="gray">#808080</color>
+    <color name="light_gray">#E0E0E0</color>
+    <color name="transparent_white">#80FFFFFF</color>
+    <color name="transparent_black">#80000000</color>
 </resources> 

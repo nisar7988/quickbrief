@@ -45,4 +45,7 @@ public interface NewsApiService {
 
  @GET("1/latest")
     Call<NewsApiResponse> getLatestNews(@Query("language") String language, @Query("category") String category, @Query("apikey") String apiKey);
+    
+    @GET("1/news")
+    Call<NewsApiResponse> getNews(@Query("language") String language, @Query("category") String category, @Query("page") String page, @Query("apikey") String apiKey);
 } 

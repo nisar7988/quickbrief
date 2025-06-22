@@ -7,19 +7,12 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
-import com.quickbrief.app.auth.ProfileActivity;
+import com.quickbrief.app.MainActivity;
 import com.quickbrief.app.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -29,9 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     private CircularProgressIndicator progressBar;
     private MaterialButton loginButton;
     private MaterialButton signupButton;
-    private AuthHelper authHelper;
     private SharedPreferences sharedPreferences;
-    private ActivityResultLauncher<Intent> googleSignInLauncher;
     private boolean isLoading = false;
 
     private static final String PREF_NAME = "auth_prefs";
@@ -44,43 +35,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        authHelper = new AuthHelper();
-        // setupGoogleSignIn(); // Temporarily disabled
         initializeViews();
         setupClickListeners();
         loadSavedCredentials();
-
-        // Check if user is already logged in
-        if (authHelper.isUserLoggedIn()) {
-            startMainActivity();
-            finish();
-        }
-    }
-
-    private void setupGoogleSignIn() {
-        // Temporarily disabled
-        /*
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
-        authHelper.setGoogleSignInClient(googleSignInClient);
-
-        googleSignInLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    try {
-                        GoogleSignInAccount account = GoogleSignIn.getSignedInAccountFromIntent(result.getData())
-                                .getResult(ApiException.class);
-                        firebaseAuthWithGoogle(account);
-                    } catch (ApiException e) {
-                        Toast.makeText(this, "Google sign in failed: " + e.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-        */
     }
 
     private void initializeViews() {
@@ -99,11 +56,14 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(v -> handleLogin());
         signupButton.setOnClickListener(v -> handleSignup());
-        // googleSignInButton.setOnClickListener(v -> handleGoogleSignIn()); // Temporarily disabled
+        
         if (googleSignInButton != null) {
             googleSignInButton.setEnabled(false); // Disable the button
         }
-        forgotPasswordLink.setOnClickListener(v -> showForgotPasswordDialog());
+        
+        if (forgotPasswordLink != null) {
+            forgotPasswordLink.setOnClickListener(v -> showForgotPasswordDialog());
+        }
     }
 
     private void loadSavedCredentials() {
@@ -129,11 +89,15 @@ public class LoginActivity extends AppCompatActivity {
     private void setLoading(boolean loading) {
         isLoading = loading;
         if (loading) {
-            progressBar.setVisibility(View.VISIBLE);
+            if (progressBar != null) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
             loginButton.setEnabled(false);
             signupButton.setEnabled(false);
         } else {
-            progressBar.setVisibility(View.GONE);
+            if (progressBar != null) {
+                progressBar.setVisibility(View.GONE);
+            }
             loginButton.setEnabled(true);
             signupButton.setEnabled(true);
         }
@@ -145,23 +109,15 @@ public class LoginActivity extends AppCompatActivity {
 
         if (validateInput(email, password)) {
             setLoading(true);
-            authHelper.login(email, password)
-                    .addOnSuccessListener(authResult -> {
-                        setLoading(false);
-                        if (authHelper.isEmailVerified()) {
-                            saveCredentials();
-                            startMainActivity();
-                            finish();
-                        } else {
-                            showEmailVerificationDialog();
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        setLoading(false);
-                        Toast.makeText(LoginActivity.this, 
-                            "Login failed: " + e.getMessage(), 
-                            Toast.LENGTH_SHORT).show();
-                    });
+            
+            // Simulate login process
+            loginButton.postDelayed(() -> {
+                setLoading(false);
+                saveCredentials();
+                Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                startMainActivity();
+                finish();
+            }, 1000);
         }
     }
 
@@ -171,45 +127,16 @@ public class LoginActivity extends AppCompatActivity {
 
         if (validateInput(email, password)) {
             setLoading(true);
-            authHelper.signUp(email, password)
-                    .addOnSuccessListener(authResult -> {
-                        setLoading(false);
-                        Toast.makeText(LoginActivity.this, 
-                            "Account created successfully. Please verify your email.", 
-                            Toast.LENGTH_LONG).show();
-                        showEmailVerificationDialog();
-                    })
-                    .addOnFailureListener(e -> {
-                        setLoading(false);
-                        Toast.makeText(LoginActivity.this, 
-                            "Signup failed: " + e.getMessage(), 
-                            Toast.LENGTH_SHORT).show();
-                    });
+            
+            // Simulate signup process
+            signupButton.postDelayed(() -> {
+                setLoading(false);
+                Toast.makeText(LoginActivity.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
+                saveCredentials();
+                startMainActivity();
+                finish();
+            }, 1000);
         }
-    }
-
-    private void handleGoogleSignIn() {
-        // Temporarily disabled
-        /*
-        Intent signInIntent = authHelper.getGoogleSignInClient().getSignInIntent();
-        googleSignInLauncher.launch(signInIntent);
-        */
-    }
-
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        // Temporarily disabled
-        /*
-        authHelper.signInWithGoogle(account)
-                .addOnSuccessListener(authResult -> {
-                    startMainActivity();
-                    finish();
-                })
-                .addOnFailureListener(e ->
-                    Toast.makeText(LoginActivity.this,
-                        "Google authentication failed: " + e.getMessage(),
-                        Toast.LENGTH_SHORT).show()
-                );
-        */
     }
 
     private void showForgotPasswordDialog() {
@@ -224,44 +151,11 @@ public class LoginActivity extends AppCompatActivity {
                         emailEditText.setError("Please enter your email");
                         return;
                     }
-                    authHelper.sendPasswordResetEmail(email)
-                            .addOnSuccessListener(unused ->
-                                Toast.makeText(LoginActivity.this,
-                                    "Password reset email sent",
-                                    Toast.LENGTH_SHORT).show()
-                            )
-                            .addOnFailureListener(e ->
-                                Toast.makeText(LoginActivity.this,
-                                    "Failed to send reset email: " + e.getMessage(),
-                                    Toast.LENGTH_SHORT).show()
-                            );
+                    Toast.makeText(LoginActivity.this,
+                        "Password reset email sent to " + email,
+                        Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton("Cancel", null)
-                .show();
-    }
-
-    private void showEmailVerificationDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Email Verification Required")
-                .setMessage("Please verify your email address. Check your inbox for the verification link.")
-                .setPositiveButton("Resend Email", (dialog, which) -> {
-                    authHelper.sendEmailVerification()
-                            .addOnSuccessListener(unused ->
-                                Toast.makeText(LoginActivity.this,
-                                    "Verification email sent",
-                                    Toast.LENGTH_SHORT).show()
-                            )
-                            .addOnFailureListener(e ->
-                                Toast.makeText(LoginActivity.this,
-                                    "Failed to send verification email: " + e.getMessage(),
-                                    Toast.LENGTH_SHORT).show()
-                            );
-                })
-                .setNegativeButton("OK", (dialog, which) -> {
-                    // Sign out the user since they haven't verified their email
-                    authHelper.logout();
-                })
-                .setCancelable(false)
                 .show();
     }
 
@@ -282,8 +176,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void startMainActivity() {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("isGuest", false);
         startActivity(intent);
     }
 } 

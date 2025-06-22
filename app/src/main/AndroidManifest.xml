@@ -40,11 +40,6 @@
             android:parentActivityName=".MainActivity" />
             
         <activity
-            android:name=".ProfileActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity" />
-
-        <activity
             android:name=".auth.ProfileActivity"
             android:exported="false" />
     </application>

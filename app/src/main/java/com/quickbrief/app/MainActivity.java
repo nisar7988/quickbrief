@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -112,6 +113,11 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the custom menu layout
         View menuView = getLayoutInflater().inflate(R.layout.custom_menu_layout, null);
         
+        // Update language text to show current language
+        TextView languageText = menuView.findViewById(R.id.menu_language_text);
+        String currentLanguageName = languageManager.getLanguageName();
+        languageText.setText("Language (" + currentLanguageName + ")");
+        
         // Create a dialog with our custom style
         Dialog menuDialog = new Dialog(this, R.style.CustomMenuDialog);
         menuDialog.setContentView(menuView);
@@ -199,6 +205,8 @@ public class MainActivity extends AppCompatActivity {
                     // Save the selected language
                     languageManager.setLanguage(selectedLanguageCode, selectedLanguageName);
                     currentLanguage = selectedLanguageCode;
+                    
+                    Log.d(TAG, "Language changed to: " + selectedLanguageCode + " (" + selectedLanguageName + ")");
                     
                     // Show toast message
                     Toast.makeText(this, 
@@ -291,7 +299,8 @@ public class MainActivity extends AppCompatActivity {
         
         // Log and show the current category for debugging
         Log.d(TAG, "fetchNews: Using category=" + currentCategory);
-        Toast.makeText(this, "Category: " + currentCategory, Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "fetchNews: Using language=" + currentLanguage);
+        Toast.makeText(this, "Category: " + currentCategory + ", Language: " + currentLanguage, Toast.LENGTH_SHORT).show();
 
         if (nextPage == null) {
             progressBar.setVisibility(View.VISIBLE);
@@ -308,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
         // Use the /1/news endpoint with cursor-based pagination
         Call<NewsApiResponse> call = NewsApiClient.getInstance()
             .getNewsApiService()
-            .getNews("en", currentCategory, nextPage, NewsApiClient.getApiKey());
+            .getNews(currentLanguage, currentCategory, nextPage, NewsApiClient.getApiKey());
         Log.d(TAG, "fetchNews: Making API call with URL: " + call.request().url());
         
         call.enqueue(new Callback<NewsApiResponse>() {
@@ -411,6 +420,13 @@ public class MainActivity extends AppCompatActivity {
         // Reset loading state when activity resumes
         isLoading = false;
         Log.d(TAG, "onResume: Reset isLoading to false");
+        
+        // Refresh current language from LanguageManager
+        String savedLanguage = languageManager.getLanguageCode();
+        if (!savedLanguage.equals(currentLanguage)) {
+            Log.d(TAG, "onResume: Language changed from " + currentLanguage + " to " + savedLanguage);
+            currentLanguage = savedLanguage;
+        }
     }
 
     /**

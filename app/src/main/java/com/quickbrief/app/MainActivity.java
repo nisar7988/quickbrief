@@ -66,101 +66,32 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+        setContentView(R.layout.activity_main);
+        isGuest = getIntent().getBooleanExtra("isGuest", false);
+
         // Initialize language manager
         languageManager = new LanguageManager(this);
         currentLanguage = languageManager.getLanguageCode();
         
-        setContentView(R.layout.activity_main);
-
-        Log.d(TAG, "onCreate: Starting app initialization");
-        
-        // Check API key
+        // Check API key for debugging
         checkApiKey();
-        
-        // Get intent extras
-        isGuest = getIntent().getBooleanExtra("isGuest", false);
 
         // Initialize views
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(R.string.app_name);
-        }
-
-        newsRecyclerView = findViewById(R.id.newsRecyclerView);
-        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        progressBar = findViewById(R.id.progressBar);
-        categoryChipGroup = findViewById(R.id.categoryChipGroup);
-
-        // Initialize category map
+        initializeViews();
+        
+        // Initialize category mapping
         initCategoryMap();
-        Log.d(TAG, "onCreate: Category map initialized");
-
-        // Add a button to manually load more news (for testing)
-        findViewById(R.id.btnLoadMore).setOnClickListener(v -> {
-            Log.d(TAG, "Load More button clicked");
-            // Force reset loading state
-            isLoading = false;
-            loadMoreNews();
-        });
-        Log.d(TAG, "onCreate: Load more button setup complete");
-
+        
         // Setup RecyclerView
-        newsList = new ArrayList<>();
-        newsAdapter = new NewsAdapter(this, newsList);
-        layoutManager = new LinearLayoutManager(this);
-        newsRecyclerView.setLayoutManager(layoutManager);
-        newsRecyclerView.setAdapter(newsAdapter);
-        Log.d(TAG, "onCreate: RecyclerView setup complete");
-
-        // Setup category selection listener
-        categoryChipGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId != View.NO_ID) {
-                currentCategory = categoryMap.get(checkedId);
-                Log.d(TAG, "Category selected: " + currentCategory);
-                // Reset pagination and fetch news for the selected category
-                resetAndFetchNews();
-            }
-        });
-
-        // Setup scroll listener for pagination
-        newsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                
-                // Only trigger loading more when scrolling down
-                if (dy <= 0) return;
-                
-                int visibleItemCount = layoutManager.getChildCount();
-                int totalItemCount = layoutManager.getItemCount();
-                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
-
-                Log.d(TAG, "onScrolled: visibleItemCount=" + visibleItemCount + 
-                      ", totalItemCount=" + totalItemCount + 
-                      ", firstVisibleItemPosition=" + firstVisibleItemPosition + 
-                      ", lastVisibleItemPosition=" + lastVisibleItemPosition +
-                      ", isLoading=" + isLoading + 
-                      ", isLastPage=" + isLastPage);
-
-                // Check if we need to load more data
-                // Load more when user is near the end (2 items before the end)
-                if (!isLoading && !isLastPage) {
-                    if (lastVisibleItemPosition >= totalItemCount - 3) {
-                        Log.d(TAG, "onScrolled: Near the end, loading more news");
-                        loadMoreNews();
-                    }
-                }
-            }
-        });
-
+        setupRecyclerView();
+        
         // Setup SwipeRefreshLayout
-        swipeRefreshLayout.setColorSchemeResources(R.color.accent_blue);
-        swipeRefreshLayout.setOnRefreshListener(this::resetAndFetchNews);
-
-        // Initial news fetch
+        setupSwipeRefreshLayout();
+        
+        // Setup category chips
+        setupCategoryChips();
+        
+        // Fetch initial news
         fetchNews();
     }
 
@@ -366,9 +297,11 @@ public class MainActivity extends AppCompatActivity {
         }
         
         isLoading = true;
-        Log.d(TAG, "fetchNews: currentPage=" + currentPage + 
-              ", category=" + currentCategory + 
-              ", language=" + currentLanguage);
+        Log.d(TAG, "fetchNews: currentPage=" + currentPage);
+        
+        // Log API key for debugging
+        String apiKey = NewsApiClient.getApiKey();
+        Log.d(TAG, "fetchNews: API Key length=" + (apiKey != null ? apiKey.length() : 0));
         
         if (currentPage == 1) {
             progressBar.setVisibility(View.VISIBLE);
@@ -382,31 +315,17 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Get news based on language
-        Call<NewsApiResponse> call;
-        
-        // For some languages, top headlines might not work well, so use 'everything' endpoint
-        // with a general query for those languages
-        if (currentLanguage.equals("ar") || currentLanguage.equals("zh") || 
-            currentLanguage.equals("ja") || currentLanguage.equals("ru")) {
-            // Use 'everything' endpoint with a general query for these languages
-            call = NewsApiClient.getInstance()
-                .getNewsApiService()
-                .getEverythingByLanguage("news", currentLanguage, "publishedAt", 
-                                        currentPage, PAGE_SIZE, NewsApiClient.getApiKey());
-            Log.d(TAG, "fetchNews: Using 'everything' endpoint for language: " + currentLanguage);
-        } else {
-            // Use 'top-headlines' endpoint for other languages
-            call = NewsApiClient.getInstance()
-                .getNewsApiService()
-                .getTopHeadlinesByLanguage(currentLanguage, currentCategory, 
-                                          currentPage, PAGE_SIZE, NewsApiClient.getApiKey());
-            Log.d(TAG, "fetchNews: Using 'top-headlines' endpoint for language: " + currentLanguage);
-        }
+        // Use the working /1/latest endpoint
+        Call<NewsApiResponse> call = NewsApiClient.getInstance()
+            .getNewsApiService()
+            .getLatestNews(NewsApiClient.getApiKey());
+        Log.d(TAG, "fetchNews: Making API call with URL: " + call.request().url());
         
         call.enqueue(new Callback<NewsApiResponse>() {
             @Override
             public void onResponse(@NonNull Call<NewsApiResponse> call, @NonNull Response<NewsApiResponse> response) {
+                Log.d(TAG, "onResponse: Response code=" + response.code() + ", isSuccessful=" + response.isSuccessful());
+                
                 if (currentPage != 1) {
                     Log.d(TAG, "onResponse: Removing loading footer");
                     newsAdapter.removeLoadingFooter();
@@ -419,81 +338,35 @@ public class MainActivity extends AppCompatActivity {
 
                 if (response.isSuccessful() && response.body() != null) {
                     NewsApiResponse apiResponse = response.body();
-                    Log.d(TAG, "onResponse: Status=" + apiResponse.getStatus() + 
-                          ", TotalResults=" + apiResponse.getTotalResults() +
-                          ", CurrentPage=" + currentPage);
+                    Log.d(TAG, "onResponse: Status=" + apiResponse.getStatus() + ", TotalResults=" + apiResponse.getTotalResults() + ", CurrentPage=" + currentPage);
                     List<News> newsItems = new ArrayList<>();
-                    if (apiResponse.getResults() != null) { // Corrected from getArticles() to getResults() previously, ensuring it's results now
-                        // Change getArticles() to getResults() to match NewsData.io response
+                    if (apiResponse.getResults() != null) {
                         for (NewsApiResponse.Article article : apiResponse.getResults()) {
                             if (article.getTitle() != null && article.getDescription() != null) {
                                 newsItems.add(new News(
                                     article.getTitle(),
                                     article.getDescription(),
- article.getImageUrl(), // Changed from getUrlToImage() to getImageUrl()
+                                    article.getImageUrl(),
                                     article.getSource() != null ? article.getSource().getName() : "Unknown",
                                     article.getUrl()
                                 ));
                             }
                         }
                     }
-                    
                     Log.d(TAG, "onResponse: Received " + newsItems.size() + " news items for page " + currentPage);
-                    
-                    // Check if this is the last page
-                    if (newsItems.isEmpty() || newsItems.size() < PAGE_SIZE) {
-                        isLastPage = true;
-                        Log.d(TAG, "onResponse: This is the last page (page " + currentPage + ")");
-                        
-                        // Show a toast if we've reached the end
-                        if (currentPage > 1) {
-                            Toast.makeText(MainActivity.this, 
-                                R.string.end_of_news_feed, Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        isLastPage = false;
-                        Log.d(TAG, "onResponse: More pages available after page " + currentPage);
-                    }
-                    
                     if (currentPage == 1) {
-                        if (newsItems.isEmpty()) {
-                            Toast.makeText(MainActivity.this, 
-                                getString(R.string.no_news_available, currentCategory), 
-                                Toast.LENGTH_SHORT).show();
-                            
-                            // If no news found with top-headlines, try 'everything' endpoint
-                            if (!call.request().url().toString().contains("everything")) {
-                                Log.d(TAG, "onResponse: No news found with top-headlines, trying 'everything' endpoint");
-                                // Try with 'everything' endpoint
-                                NewsApiClient.getInstance()
-                                    .getNewsApiService()
-                                    .getEverythingByLanguage("news", currentLanguage, "publishedAt", 
-                                                            currentPage, PAGE_SIZE, NewsApiClient.getApiKey())
-                                    .enqueue(this);
-                                return;
-                            }
-                        } else {
-                            newsAdapter.updateNews(newsItems);
-                        }
+                        newsAdapter.updateNews(newsItems);
                     } else {
                         newsAdapter.addNews(newsItems);
                     }
+                    isLastPage = true; // No pagination for /latest
                 } else {
                     String errorMsg = getString(R.string.error_fetching_news);
                     try {
                         if (response.errorBody() != null) {
                             String errorBody = response.errorBody().string();
                             errorMsg += ": " + errorBody;
-                            
-                            // Check for common NewsAPI error codes
-                            if (response.code() == 429) {
-                                errorMsg = "Rate limit exceeded. Please try again later.";
-                                // Mark as last page to prevent further requests
-                                isLastPage = true;
-                            } else if (response.code() == 401) {
-                                errorMsg = "API key error. Please check your API key.";
-                                isLastPage = true;
-                            }
+                            Log.e(TAG, "onResponse: Error body: " + errorBody);
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Error reading error body", e);
@@ -505,6 +378,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<NewsApiResponse> call, @NonNull Throwable t) {
+                Log.e(TAG, "onFailure: Network error", t);
+                Log.e(TAG, "onFailure: Request URL: " + call.request().url());
+                
                 if (currentPage != 1) {
                     Log.d(TAG, "onFailure: Removing loading footer");
                     newsAdapter.removeLoadingFooter();
@@ -514,9 +390,7 @@ public class MainActivity extends AppCompatActivity {
                 
                 swipeRefreshLayout.setRefreshing(false);
                 isLoading = false;
-                Log.e(TAG, "onFailure: Network error", t);
-                Toast.makeText(MainActivity.this, 
-                    getString(R.string.error_network, t.getMessage()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.error_network, t.getMessage()), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -556,6 +430,75 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Invalid API key. Please set a valid NewsAPI key.", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "API key is set: " + apiKey.substring(0, 4) + "..." + apiKey.substring(apiKey.length() - 4));
+        }
+    }
+
+    private void initializeViews() {
+        newsRecyclerView = findViewById(R.id.newsRecyclerView);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        progressBar = findViewById(R.id.progressBar);
+        categoryChipGroup = findViewById(R.id.categoryChipGroup);
+        newsList = new ArrayList<>();
+    }
+
+    private void setupRecyclerView() {
+        layoutManager = new LinearLayoutManager(this);
+        newsRecyclerView.setLayoutManager(layoutManager);
+        newsAdapter = new NewsAdapter(this, newsList);
+        newsRecyclerView.setAdapter(newsAdapter);
+        
+        // Add scroll listener for pagination
+        newsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                
+                if (!isLoading && !isLastPage) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                            && firstVisibleItemPosition >= 0
+                            && totalItemCount >= PAGE_SIZE) {
+                        loadMoreNews();
+                    }
+                }
+            }
+        });
+    }
+
+    private void setupSwipeRefreshLayout() {
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            resetAndFetchNews();
+        });
+    }
+
+    private void setupCategoryChips() {
+        // Create category chips
+        String[] categories = {"general", "business", "technology", "sports", "entertainment", "health", "science"};
+        String[] categoryNames = {"General", "Business", "Technology", "Sports", "Entertainment", "Health", "Science"};
+        
+        for (int i = 0; i < categories.length; i++) {
+            Chip chip = new Chip(this);
+            chip.setText(categoryNames[i]);
+            chip.setCheckable(true);
+            chip.setCheckedIconVisible(false);
+            
+            // Set the first chip (General) as checked by default
+            if (i == 0) {
+                chip.setChecked(true);
+            }
+            
+            final String category = categories[i];
+            chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    currentCategory = category;
+                    resetAndFetchNews();
+                }
+            });
+            
+            categoryChipGroup.addView(chip);
         }
     }
 } 

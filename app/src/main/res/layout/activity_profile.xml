@@ -4,93 +4,139 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/primary_dark_blue">
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progressIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone"
-        app:indicatorColor="@color/accent_blue" />
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary_dark_blue"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:contentInsetStartWithNavigation="0dp"
+        app:contentInsetStart="0dp" />
 
     <LinearLayout
-        android:id="@+id/displayLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <TextView
-            android:id="@+id/nameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/emailTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/bioTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/editButton"
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit" />
-    </LinearLayout>
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            app:indicatorColor="@color/accent_blue" />
 
-    <LinearLayout
-        android:id="@+id/editLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/nameEditText"
+        <!-- Profile Header -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginBottom="24dp"
+            android:padding="16dp"
+            android:background="@drawable/dialog_background">
 
-        <EditText
-            android:id="@+id/bioEditText"
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/default_profile"
+                android:contentDescription="Profile Picture"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="User Profile"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
+
+        </LinearLayout>
+
+        <!-- User Information -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Bio" />
+            android:orientation="vertical"
+            android:background="@drawable/dialog_background"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
 
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Account Information"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:id="@+id/userEmailTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email: Loading..."
+                android:textColor="@color/off_white"
+                android:layout_marginBottom="8dp"
+                android:padding="8dp"
+                android:background="@drawable/placeholder_image" />
+
+            <TextView
+                android:id="@+id/userIdTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="User ID: Loading..."
+                android:textColor="@color/off_white"
+                android:layout_marginBottom="8dp"
+                android:padding="8dp"
+                android:background="@drawable/placeholder_image" />
+
+            <TextView
+                android:id="@+id/verificationStatusTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Verification: Loading..."
+                android:textColor="@color/off_white"
+                android:layout_marginBottom="8dp"
+                android:padding="8dp"
+                android:background="@drawable/placeholder_image" />
+
+            <TextView
+                android:id="@+id/createdAtTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Created: Loading..."
+                android:textColor="@color/off_white"
+                android:padding="8dp"
+                android:background="@drawable/placeholder_image" />
+
+        </LinearLayout>
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Save" />
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/logoutButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/logout"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/accent_blue"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/userEmailTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/userIdTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/verificationStatusTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/createdAtTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logout" />
 </LinearLayout>

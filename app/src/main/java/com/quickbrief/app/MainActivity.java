@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
         // Use the working /1/latest endpoint
         Call<NewsApiResponse> call = NewsApiClient.getInstance()
             .getNewsApiService()
-            .getLatestNews(NewsApiClient.getApiKey());
+            .getLatestNews("en", NewsApiClient.getApiKey());
         Log.d(TAG, "fetchNews: Making API call with URL: " + call.request().url());
         
         call.enqueue(new Callback<NewsApiResponse>() {

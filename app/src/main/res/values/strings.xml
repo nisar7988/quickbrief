@@ -69,23 +69,23 @@
     
     <!-- Category names -->
     <string-array name="category_names">
-        <item>General</item>
+        <item>Top</item>
         <item>Business</item>
+        <item>Technology</item>
+        <item>Sports</item>
         <item>Entertainment</item>
         <item>Health</item>
         <item>Science</item>
-        <item>Sports</item>
-        <item>Technology</item>
     </string-array>
     
     <!-- Category codes -->
     <string-array name="category_codes">
-        <item>general</item>
+        <item>top</item>
         <item>business</item>
+        <item>technology</item>
+        <item>sports</item>
         <item>entertainment</item>
         <item>health</item>
         <item>science</item>
-        <item>sports</item>
-        <item>technology</item>
     </string-array>
 </resources>

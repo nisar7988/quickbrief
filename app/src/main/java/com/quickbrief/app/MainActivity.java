@@ -30,9 +30,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,9 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private List<News> newsList;
     private boolean isGuest;
     
-    // Category mapping
-    private Map<Integer, String> categoryMap = new HashMap<>();
-    private String currentCategory = "general";
+    // Category and language settings
+    private String currentCategory = "top";
     
     // Language settings
     private LanguageManager languageManager;
@@ -78,9 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize views
         initializeViews();
-        
-        // Initialize category mapping
-        initCategoryMap();
         
         // Setup RecyclerView
         setupRecyclerView();
@@ -238,17 +232,17 @@ public class MainActivity extends AppCompatActivity {
                 
                 Toast.makeText(this, "Selected: " + categoryName, Toast.LENGTH_SHORT).show();
                 
+                // Update current category and refresh news
+                currentCategory = categoryCode;
+                resetAndFetchNews();
+                
                 // Find the corresponding chip and select it
-                int chipId = -1;
-                for (Map.Entry<Integer, String> entry : categoryMap.entrySet()) {
-                    if (entry.getValue().equals(categoryCode)) {
-                        chipId = entry.getKey();
+                for (int i = 0; i < categoryChipGroup.getChildCount(); i++) {
+                    Chip chip = (Chip) categoryChipGroup.getChildAt(i);
+                    if (chip.getText().toString().equals(categoryName)) {
+                        chip.setChecked(true);
                         break;
                     }
-                }
-                
-                if (chipId != -1) {
-                    categoryChipGroup.check(chipId);
                 }
             });
         
@@ -270,15 +264,6 @@ public class MainActivity extends AppCompatActivity {
             .setNegativeButton(R.string.no, null);
         
         builder.show();
-    }
-
-    private void initCategoryMap() {
-        categoryMap.put(R.id.chipGeneral, "general");
-        categoryMap.put(R.id.chipSports, "sports");
-        categoryMap.put(R.id.chipEntertainment, "entertainment");
-        categoryMap.put(R.id.chipBusiness, "business");
-        categoryMap.put(R.id.chipTechnology, "technology");
-        categoryMap.put(R.id.chipCrime, "crime");
     }
 
     private void resetAndFetchNews() {
@@ -303,6 +288,10 @@ public class MainActivity extends AppCompatActivity {
         String apiKey = NewsApiClient.getApiKey();
         Log.d(TAG, "fetchNews: API Key length=" + (apiKey != null ? apiKey.length() : 0));
         
+        // Log and show the current category for debugging
+        Log.d(TAG, "fetchNews: Using category=" + currentCategory);
+        Toast.makeText(this, "Category: " + currentCategory, Toast.LENGTH_SHORT).show();
+
         if (currentPage == 1) {
             progressBar.setVisibility(View.VISIBLE);
         } else {
@@ -315,10 +304,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Use the working /1/latest endpoint
+        // Use the working /1/latest endpoint with category
         Call<NewsApiResponse> call = NewsApiClient.getInstance()
             .getNewsApiService()
-            .getLatestNews("en", NewsApiClient.getApiKey());
+            .getLatestNews("en", currentCategory, NewsApiClient.getApiKey());
         Log.d(TAG, "fetchNews: Making API call with URL: " + call.request().url());
         
         call.enqueue(new Callback<NewsApiResponse>() {
@@ -475,9 +464,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupCategoryChips() {
-        // Create category chips
-        String[] categories = {"general", "business", "technology", "sports", "entertainment", "health", "science"};
-        String[] categoryNames = {"General", "Business", "Technology", "Sports", "Entertainment", "Health", "Science"};
+        // Create category chips with valid NewsData.io categories
+        String[] categories = {"top", "business", "technology", "sports", "entertainment", "health", "science"};
+        String[] categoryNames = {"Top", "Business", "Technology", "Sports", "Entertainment", "Health", "Science"};
         
         for (int i = 0; i < categories.length; i++) {
             Chip chip = new Chip(this);
@@ -485,7 +474,7 @@ public class MainActivity extends AppCompatActivity {
             chip.setCheckable(true);
             chip.setCheckedIconVisible(false);
             
-            // Set the first chip (General) as checked by default
+            // Set the first chip (Top) as checked by default
             if (i == 0) {
                 chip.setChecked(true);
             }
